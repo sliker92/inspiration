@@ -1,0 +1,119 @@
+<?php
+/** @var YDT\Inspiration\Block\Inspiration\Filter $block */
+
+use YDT\Inspiration\Model\Config\Source\TypeSource;
+
+?>
+<?php
+$categoryCollection = $block->getCategoryCollection();
+?>
+
+<div class="container category-text mx-auto" data-mage-init='{"inspiration-filter": {}}'>
+    <div class="row d-none d-md-block">
+        <div class="col-12">
+            <h2 class="mb-0 font-size-14 text font-weight-bold"><?= $block->escapeHtml(('Filter')) ?></h2>
+            <hr class="mt-1">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul id="narrow-by-list" class="products-filter list-unstyled row thin-gutters-sm mb-0">
+                <li class="col-xl-3 col-lg-4 col-6">
+                    <div class="list-item">
+                        <div class="card border-0">
+                            <div class="card-body pl-2 pr-1 py-2">
+                                <h6 class="mb-0 filter-title" data-toggle="collapse"
+                                    data-target="#filter-filter_type-collapse">
+                                    <div class="float-right">
+                                        <i class="fa fa-caret-down fa-fw fa-lg text-faded-grey"
+                                           data-hide-expanded=""></i>
+                                        <i class="fa fa-caret-up fa-fw fa-lg text-faded-grey" data-show-expanded=""></i>
+                                    </div>
+                                    <span
+                                        class="font-size-14 text"><?= $block->escapeHtml(__('References / Galleries')) ?></span>
+                                </h6>
+                                <div class="collapse" id="filter-filter_type-collapse">
+                                    <div class="filter-options p-3">
+                                        <div class="scrollbar-external">
+                                            <ol class="list-unstyled mb-0 layered-nav-items row">
+                                                <li class="filter-category-type col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                                    data-href="#">
+                                                    <label class="mb-0">
+                                                        <input data-type="cms_page"
+                                                               type="checkbox"
+                                                               data-toggle="checkbox">
+                                                        <i class="fa fa-square-o fa-lg fa-fw text-left"
+                                                           data-visible="unchecked"></i>
+                                                        <i class="fa fa-check-square-o fa-lg fa-fw text-left"
+                                                           data-visible="checked"></i>
+                                                        <?= $block->escapeHtml(__('References')) ?>
+                                                    </label>
+                                                </li>
+                                                <li class="filter-category-type col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                                    data-href="#">
+                                                    <label class="mb-0">
+                                                        <input type="checkbox"
+                                                               data-type="gallery"
+                                                               data-toggle="checkbox">
+                                                        <i class="fa fa-square-o fa-lg fa-fw text-left"
+                                                           data-visible="unchecked"></i>
+                                                        <i class="fa fa-check-square-o fa-lg fa-fw text-left"
+                                                           data-visible="checked"></i>
+                                                        <?= $block->escapeHtml(__('Gallery')) ?>
+                                                    </label>
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <?php if (isset($categoryCollection) && $categoryCollection->count() > 0): ?>
+                    <li class="col-xl-3 col-lg-4 col-6">
+                        <div class="list-item">
+                            <div class="card border-0">
+                                <div class="card-body pl-2 pr-1 py-2">
+                                    <h6 class="mb-0 filter-title" data-toggle="collapse"
+                                        data-target="#filter-filter_kapasitet_kg-collapse">
+                                        <div class="float-right">
+                                            <i class="fa fa-caret-down fa-fw fa-lg text-faded-grey"
+                                               data-hide-expanded=""></i>
+                                            <i class="fa fa-caret-up fa-fw fa-lg text-faded-grey"
+                                               data-show-expanded=""></i>
+                                        </div>
+                                        <span class="font-size-14 text"><?= $block->escapeHtml(__('Category')) ?></span>
+                                    </h6>
+                                    <div class="collapse" id="filter-filter_kapasitet_kg-collapse">
+                                        <div class="filter-options p-3">
+                                            <div class="scrollbar-external">
+                                                <ol class="list-unstyled mb-0 layered-nav-items row">
+                                                    <?php foreach ($categoryCollection->getItems() as $category) : ?>
+                                                        <li class="filter-category-id col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                                            data-href="#">
+                                                            <label class="mb-0">
+                                                                <input type="checkbox"
+                                                                       data-category-id="<?= $block->escapeHtml($category->getId()) ?>"
+                                                                       data-toggle="checkbox">
+                                                                <i class="fa fa-square-o fa-lg fa-fw text-left"
+                                                                   data-visible="unchecked"></i>
+                                                                <i class="fa fa-check-square-o fa-lg fa-fw text-left"
+                                                                   data-visible="checked"></i>
+                                                                <?= $block->escapeHtml($category->getName()) ?>
+                                                            </label>
+                                                        </li>
+                                                    <?php endforeach ?>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </li>
+                <?php endif ?>
+            </ul>
+        </div>
+    </div>
+</div>

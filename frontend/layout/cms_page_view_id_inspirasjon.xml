@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="main.content">
+            <container name="page.banner.top" htmlTag="div" htmlClass="page-banner"  >
+                <block name="category.filter" class="YDT\Inspiration\Block\Inspiration\Filter" template="YDT_Inspiration::inspiration/filter.phtml" before="page.banner.top" />
+                <block name="category.inspiration" class="YDT\Inspiration\Block\Inspiration\View" template="YDT_Inspiration::inspiration/view.phtml" before="page.banner.top" />
+            </container>
+        </referenceContainer>
+
+        <!-- move top section of category page to custom container at the top of main section -->
+        <move element="columns.top" destination="page.banner.top" />
+
+        <!-- Remove the category page main title -->
+        <referenceBlock name="page.main.title" remove="true"/>
+
+        <!-- Remove the sidebar from category page -->
+        <referenceContainer name="sidebar.main" remove="true" />
+    </body>
+</page>

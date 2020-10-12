@@ -1,0 +1,97 @@
+<?php
+/** @var YDT\Inspiration\Block\Inspiration\View $block */
+
+use YDT\Inspiration\Model\Config\Source\TypeSource;
+
+?>
+<?php if ($block->hasItems()): ?>
+    <div class="container mx-auto">
+        <div class="row thin-gutters my-3">
+            <?php foreach ($block->getCollection() as $inspiration) : ?>
+                <div class="col-6 col-lg-4 pb-2 pb-lg-3" id="gallery_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>" data-toggle="modal" data-target="#inspiration_modal_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>">
+                    <div class="data-category-item" data-category-id="<?= $block->escapeHtmlAttr($inspiration->getCategoryId()) ?>"
+                         data-type="<?= $block->escapeHtmlAttr($inspiration->getType()) ?>"
+                    >
+                        <?php if ($inspiration->getType() === TypeSource::TYPE_CMS_PAGE): ?>
+                            <a href="<?= $block->escapeUrl($block->getUrl($inspiration->getUrlKey())) ?>" class="carousel-item-disable">
+                                <img class="w-100" src="<?= $block->escapeHtmlAttr($inspiration->getImageUrl()) ?>"
+                                     alt="<?= $block->escapeHtmlAttr($inspiration->getUrlKey()) ?>">
+                            </a>
+                        <?php endif ?>
+                        <?php if ($inspiration->getType() === TypeSource::TYPE_GALLERY): ?>
+                            <img class="w-100" src="<?= $block->escapeHtmlAttr($inspiration->getImageUrl()) ?>"
+                                 alt="Gallery"
+                                 <?php if ($keyWords = $block->convertKeyWords($inspiration->getKeywords())): ?>
+                                     data-target="#inspiration_carousel_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>"
+                                     data-slide-to="0"
+                                 <?php endif ?>
+                            >
+                        <?php endif ?>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+
+
+    <?php foreach ($block->getCollection() as $inspiration) : ?>
+    <?php
+    $isSetActive = true;
+    ?>
+        <div class="modal fade" id="inspiration_modal_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <?php if ($inspiration->getType() === 'gallery'): ?>
+                        <?php if ($keyWords = $block->convertKeyWords($inspiration->getKeywords())): ?>
+                        <div id="inspiration_carousel_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <?php foreach ($keyWords as $keyWord) : ?>
+                                <div class="carousel-item <?= $isSetActive ? 'active' : '' ?>">
+                                    <?php $isSetActive = false ?>
+                                    <?php if (isset($keyWord['image'])): ?>
+                                        <img class="d-block w-100"
+                                             src="<?= $block->escapeUrl($keyWord['image'][0]['url']) ?>"
+                                             alt="<?= $block->escapeHtml($keyWord['title'] ?? '') ?>">
+                                    <?php endif ?>
+                                    <div class="modal_footer p-2">
+
+                                    <?php if (isset($keyWord['title'])): ?>
+                                        <span class="product">
+                                            <?= $block->escapeHtml($keyWord['title']) ?>
+                                        </span>
+                                    <?php endif ?>
+                                    <?php if (isset($keyWord['product_info'])): ?>
+                                        <?php foreach ($keyWord['product_info'] as $item) : ?>
+                                            <?php if (isset($item['product_sku'], $item['product_label']) && ($product = $block->getProductBySku(
+                                                    $item['product_sku']
+                                                ))): ?>
+                                                <span class="product">
+                                                    <a href="<?= $block->escapeUrl($product->getProductUrl()) ?>" class="font-weight-bold">
+                                                        <?= $block->escapeHtml($item['product_label']) ?>
+                                                    </a> <?= $block->escapeHtml(str_replace(',00', ',-', number_format($product->getFinalPrice(), 2, ',', '.'))) ?>.
+                                                </span>
+                                            <?php endif ?>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
+                                    </div>
+                                </div>
+                                <?php endforeach ?>
+                            </div>
+                            <a class="carousel-control-prev" href="#inspiration_carousel_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>" role="button" data-slide="prev">
+                                <button type="button" class="btn rounded-circle slick-arrow position-absolute arrow-left mr-n3">
+                                    <i class="fas fa-chevron-left fa"></i>
+                                </button>
+                            </a>
+                            <a class="carousel-control-next" href="#inspiration_carousel_<?= $block->escapeHtmlAttr($inspiration->getEntityId()) ?>" role="button" data-slide="next">
+                                <button type="button" class="btn rounded-circle slick-arrow position-absolute arrow-right ml-n3">
+                                    <i class="fas fa-chevron-right fa"></i>
+                                </button>
+                            </a>
+                        </div>
+                        <?php endif ?>
+                    <?php endif ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach ?>
+<?php endif ?>
